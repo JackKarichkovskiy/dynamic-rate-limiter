@@ -25,11 +25,11 @@ public class RateLimiterFacade {
 
     public Mono<RateLimitingResult> validateRequest(CustomRequestContext context) {
         String algorithmName = rateLimiterAlgorithmConfig.getRateLimiterAlgorithmName();
-        RateLimiterImpl rateLimiterAlgorithm = getRateLimiterAlgorithm(algorithmName);
+        RateLimiterImpl rateLimiterAlgorithm = selectRateLimiterAlgorithm(algorithmName);
         return rateLimiterAlgorithm.validateRequest(context);
     }
 
-    private RateLimiterImpl getRateLimiterAlgorithm(String algorithmName) {
+    private RateLimiterImpl selectRateLimiterAlgorithm(String algorithmName) {
         RateLimitingAlgorithm algorithm;
         try {
             algorithm = RateLimitingAlgorithm.valueOf(algorithmName);
