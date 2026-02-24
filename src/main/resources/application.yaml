@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ZilchInterview
+
+  config:
+    import: 'file:./external-config.properties'
+
+  cloud:
+    config:
+      enabled: false
+
+management:
+  endpoint:
+    refresh:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+
+logging:
+  level:
+    "org.example.zilchinterview": DEBUG
+    "org.springframework.boot.actuate": DEBUG
