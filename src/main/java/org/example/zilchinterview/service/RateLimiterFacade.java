@@ -6,9 +6,9 @@ import org.example.zilchinterview.config.RateLimiterAlgorithmConfig;
 import org.example.zilchinterview.model.CustomRequestContext;
 import org.example.zilchinterview.model.RateLimitingAlgorithm;
 import org.example.zilchinterview.model.RateLimitingResult;
-import org.example.zilchinterview.service.algorithm.FixedWindowRateLimiter;
+import org.example.zilchinterview.service.algorithm.redis.FixedWindowRateLimiter;
 import org.example.zilchinterview.service.algorithm.RateLimiterImpl;
-import org.example.zilchinterview.service.algorithm.TokenBucketRateLimiter;
+import org.example.zilchinterview.service.algorithm.redis.TokenBucketRateLimiter;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 

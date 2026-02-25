@@ -2,8 +2,9 @@ package org.example.zilchinterview.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.zilchinterview.service.RateLimiterFacade;
+import org.example.zilchinterview.model.CustomRequestContext;
 import org.example.zilchinterview.model.RateLimitingResult;
+import org.example.zilchinterview.service.RateLimiterFacade;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,14 +24,13 @@ public class RateLimiterController {
     @PostMapping
     public Mono<ResponseEntity<?>> rateLimitByUserId(
             @RequestHeader(value = "user-id", defaultValue = "guest") String userId) {
-        log.info("user-id={}", userId);
-
-        return rateLimiterFacade.validateRequest(null)
+        var requestContext = CustomRequestContext.builder().userId(userId).build();
+        return rateLimiterFacade.validateRequest(requestContext)
                 .map(this::mapToRateLimiterResponse);
     }
 
     private ResponseEntity<?> mapToRateLimiterResponse(RateLimitingResult result) {
-        return result.success()
+        return result.allowed()
                 ? ResponseEntity.ok().build()
                 : ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
     }

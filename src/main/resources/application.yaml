@@ -28,3 +28,10 @@ logging:
   level:
     "org.example.zilchinterview": DEBUG
     "org.springframework.boot.actuate": DEBUG
+
+app:
+  rate-limiter:
+    token-bucket:
+      rpm: 10
+    fixed-window:
+      rpm: 5
