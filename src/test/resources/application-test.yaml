@@ -1,0 +1,7 @@
+app:
+  rate-limiter:
+    token-bucket:
+      rpm: 2
+    fixed-window:
+      rpm: 2
+  rate-limiter-algorithm: FIXED_WINDOW
