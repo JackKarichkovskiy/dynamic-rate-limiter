@@ -1,13 +1,12 @@
 package org.example.zilchinterview.service;
 
-import org.example.zilchinterview.config.RateLimiterAlgorithmConfig;
+import org.example.zilchinterview.config.RateLimiterDynamicAlgorithmName;
 import org.example.zilchinterview.model.CustomRequestContext;
 import org.example.zilchinterview.model.RateLimitingResult;
-import org.example.zilchinterview.service.algorithm.redis.FixedWindowRateLimiter;
-import org.example.zilchinterview.service.algorithm.redis.TokenBucketRateLimiter;
+import org.example.zilchinterview.service.algorithm.RateLimiterAlgorithmStrategy;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
@@ -20,20 +19,25 @@ import static org.mockito.Mockito.when;
 class RateLimiterFacadeTest {
 
     @Mock
-    RateLimiterAlgorithmConfig rateLimiterAlgorithmConfig;
+    RateLimiterDynamicAlgorithmName rateLimiterDynamicAlgorithmName;
     @Mock
-    FixedWindowRateLimiter fixedWindowRateLimiter;
+    RateLimiterAlgorithmStrategy fixedWindowRateLimiter;
     @Mock
-    TokenBucketRateLimiter tokenBucketRateLimiter;
+    RateLimiterAlgorithmStrategy tokenBucketRateLimiter;
 
-    @InjectMocks
     RateLimiterFacade rateLimiterFacade;
+
+    @BeforeEach
+    void beforeEach() {
+        rateLimiterFacade = new RateLimiterFacade(rateLimiterDynamicAlgorithmName, fixedWindowRateLimiter,
+                tokenBucketRateLimiter);
+    }
 
     @Test
     void validateRequest_tokenBucketRateLimiterRoute() {
         // given
         var requestContext = CustomRequestContext.builder().userId("testId").build();
-        when(rateLimiterAlgorithmConfig.getRateLimiterAlgorithmName()).thenReturn("TOKEN_BUCKET");
+        when(rateLimiterDynamicAlgorithmName.getRateLimiterAlgorithmName()).thenReturn("TOKEN_BUCKET");
         Mono<RateLimitingResult> rateLimitingResultMono = Mono.just(RateLimitingResult.builder().build());
         when(tokenBucketRateLimiter.validateRequest(requestContext)).thenReturn(rateLimitingResultMono);
 
@@ -47,7 +51,7 @@ class RateLimiterFacadeTest {
     void validateRequest_fixedWindowRateLimiterRoute() {
         // given
         var requestContext = CustomRequestContext.builder().userId("testId").build();
-        when(rateLimiterAlgorithmConfig.getRateLimiterAlgorithmName()).thenReturn("FIXED_WINDOW");
+        when(rateLimiterDynamicAlgorithmName.getRateLimiterAlgorithmName()).thenReturn("FIXED_WINDOW");
         Mono<RateLimitingResult> rateLimitingResultMono = Mono.just(RateLimitingResult.builder().build());
         when(fixedWindowRateLimiter.validateRequest(requestContext)).thenReturn(rateLimitingResultMono);
 
@@ -61,7 +65,7 @@ class RateLimiterFacadeTest {
     void validateRequest_invalidAlgorithmConfig() {
         // given
         var requestContext = CustomRequestContext.builder().userId("testId").build();
-        when(rateLimiterAlgorithmConfig.getRateLimiterAlgorithmName()).thenReturn("not_valid");
+        when(rateLimiterDynamicAlgorithmName.getRateLimiterAlgorithmName()).thenReturn("not_valid");
         Mono<RateLimitingResult> rateLimitingResultMono = Mono.just(RateLimitingResult.builder().build());
         when(tokenBucketRateLimiter.validateRequest(requestContext)).thenReturn(rateLimitingResultMono);
 

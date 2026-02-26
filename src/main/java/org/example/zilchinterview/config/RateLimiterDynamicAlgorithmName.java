@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 @Getter
 @Component
 @RefreshScope
-public class RateLimiterAlgorithmConfig {
+public class RateLimiterDynamicAlgorithmName {
 
     private final String rateLimiterAlgorithmName;
 
-    public RateLimiterAlgorithmConfig(@Value("${app.rate-limiter-algorithm}") String rateLimiterAlgorithmName) {
+    public RateLimiterDynamicAlgorithmName(@Value("${app.rate-limiter-algorithm}") String rateLimiterAlgorithmName) {
         this.rateLimiterAlgorithmName = rateLimiterAlgorithmName;
     }
 }
