@@ -7,7 +7,7 @@ import org.example.zilchinterview.model.CustomRequestContext;
 import org.example.zilchinterview.model.RateLimitingAlgorithm;
 import org.example.zilchinterview.model.RateLimitingResult;
 import org.example.zilchinterview.service.algorithm.redis.FixedWindowRateLimiter;
-import org.example.zilchinterview.service.algorithm.RateLimiterImpl;
+import org.example.zilchinterview.service.algorithm.RateLimiterAlgorithmStrategy;
 import org.example.zilchinterview.service.algorithm.redis.TokenBucketRateLimiter;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -25,11 +25,11 @@ public class RateLimiterFacade {
 
     public Mono<RateLimitingResult> validateRequest(CustomRequestContext context) {
         String algorithmName = rateLimiterAlgorithmConfig.getRateLimiterAlgorithmName();
-        RateLimiterImpl rateLimiterAlgorithm = selectRateLimiterAlgorithm(algorithmName);
+        RateLimiterAlgorithmStrategy rateLimiterAlgorithm = selectRateLimiterAlgorithm(algorithmName);
         return rateLimiterAlgorithm.validateRequest(context);
     }
 
-    private RateLimiterImpl selectRateLimiterAlgorithm(String algorithmName) {
+    private RateLimiterAlgorithmStrategy selectRateLimiterAlgorithm(String algorithmName) {
         RateLimitingAlgorithm algorithm;
         try {
             algorithm = RateLimitingAlgorithm.valueOf(algorithmName);

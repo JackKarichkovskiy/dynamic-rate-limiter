@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.zilchinterview.config.FixedWindowAlgorithmProperties;
 import org.example.zilchinterview.model.CustomRequestContext;
 import org.example.zilchinterview.model.RateLimitingResult;
-import org.example.zilchinterview.service.algorithm.RateLimiterImpl;
+import org.example.zilchinterview.service.algorithm.RateLimiterAlgorithmStrategy;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 @Slf4j
 @Component
-public class FixedWindowRateLimiter implements RateLimiterImpl {
+public class FixedWindowRateLimiter implements RateLimiterAlgorithmStrategy {
 
     private final ReactiveStringRedisTemplate redisTemplate;
     private final RedisScript<Long> redisScript;

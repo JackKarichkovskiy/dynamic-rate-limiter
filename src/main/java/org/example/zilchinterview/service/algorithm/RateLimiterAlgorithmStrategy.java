@@ -4,7 +4,7 @@ import org.example.zilchinterview.model.CustomRequestContext;
 import org.example.zilchinterview.model.RateLimitingResult;
 import reactor.core.publisher.Mono;
 
-public interface RateLimiterImpl {
+public interface RateLimiterAlgorithmStrategy {
 
     Mono<RateLimitingResult> validateRequest(CustomRequestContext context);
 }
